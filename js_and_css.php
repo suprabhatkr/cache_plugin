@@ -10,6 +10,7 @@
 	    return $innerHTML; 
 	} 
 function compress_css_js(string $page_content){
+	$site = CDNNAME;
 	$abspath = str_replace("wp-content/plugins/caching_plugin","",__DIR__);
 	$cache_dir = $abspath."wp-content/cache/suprabhat";
 	if (!is_dir($cache_dir)){
@@ -23,7 +24,7 @@ function compress_css_js(string $page_content){
 	$to_cache_css = get_option('sup_cache_css');
 	$dom = new DOMDocument('1.0', 'UTF-8');
 	@$dom->loadHTML($page_content);
-	if($to_cache_js){
+	if(false){
 		$scripts = $dom -> getElementsByTagName('script');
 		foreach ($scripts as $script){
 			$src = $script->getAttribute('src');
@@ -42,6 +43,17 @@ function compress_css_js(string $page_content){
 				fwrite($outfile,$minifiedJS);
 				fclose($myfile);
 				fclose($outfile);
+				$fields = array('url'=>$src,'content'=>$minifiedJS);
+				// $fields_string = '';
+				// foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
+				// rtrim($fields_string, '&');
+				$fields_string = json_encode($fields);
+				$ch = curl_init();
+				curl_setopt($ch,CURLOPT_URL, $site);
+				curl_setopt($ch,CURLOPT_POST, sizeof($fields));
+				curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
+				$result = curl_exec($ch);
+				curl_close($ch);
 				$aggregatefile = fopen(WP_CONTENT_DIR."/cache/suprabhat/aggregateSuprabhat.js","a");
 				fwrite($aggregatefile, $minifiedJS);
 				fclose($aggregatefile);
@@ -49,7 +61,7 @@ function compress_css_js(string $page_content){
 			}
 		}
 	}
-	if($to_cache_css){
+	if(false){
 		$links = $dom -> getElementsByTagName('link');
 		foreach ($links as $link){
 			$src=null;
@@ -71,7 +83,7 @@ function compress_css_js(string $page_content){
 					}
 				}
 				$srcfile = str_replace(HOME_URL,ABSPATH , $src);
-				if (!preg_match("@fonts.google.com@", $src)){
+				if (!preg_match("@fonts@", $src)){
 					$outfile = str_replace(dirname($src),WP_CONTENT_DIR."/cache/suprabhat/" , $src);
 				}
 				else{
@@ -104,6 +116,17 @@ function compress_css_js(string $page_content){
 						$minifiedCSS = minify_css($samplecss);
 						$output = fopen($outfile,'w') or die("Unable to open output file");
 						fwrite($output,$minifiedCSS);
+						$sent_url = str_replace(WP_CONTENT_DIR."/cache/suprabhat", HOME_URL, $outfile);
+						$fields = array('url'=>$sent_url,'content'=>$minifiedCSS);
+						// foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
+						// rtrim($fields_string, '&');
+						$fields_string = json_encode($fields);
+						$ch = curl_init();
+						curl_setopt($ch,CURLOPT_URL, $site);
+						curl_setopt($ch,CURLOPT_POST, sizeof($fields));
+						curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
+						$result = curl_exec($ch);
+						curl_close($ch);
 						fclose($output);
 						$aggregatefile = fopen(WP_CONTENT_DIR."/cache/suprabhat/aggregateCSS.css","a");
 						fwrite($aggregatefile, $minifiedCSS);

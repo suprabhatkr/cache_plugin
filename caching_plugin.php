@@ -231,9 +231,10 @@
 	        $cache_src = str_replace(dirname($src), HOME_URL."/wp-content/cache/suprabhat", $src);
 	        $cache_file = str_replace(dirname($src), ABSPATH."wp-content/cache/suprabhat", $src);
 	        $cache_file = replace_attribute($cache_file);
+	        $cdn_src=str_replace('http://', 'http://localhost:3000/api/v1/articles/', $src);
 	        #echo $cache_file;
-			if(is_file($cache_file))
-				$tag = str_replace($src,$cache_src, $tag);
+			if(true)
+				$tag = str_replace($src,$cdn_src, $tag);
 	    }
 	    return $tag;
 	}
@@ -253,8 +254,9 @@
 		$cache_src = str_replace(dirname($src), HOME_URL."/wp-content/cache/suprabhat", $src);
 		$cache_file = str_replace(dirname($src), ABSPATH."wp-content/cache/suprabhat", $src);
 		$cache_file = replace_attribute($cache_file);
-		if(is_file($cache_file))
-			$tag = str_replace($src,$cache_src, $tag);
+		$cdn_src=str_replace('http://', 'http://localhost:3000/api/v1/articles/', $src);
+		if(true)
+			$tag = str_replace($src,$cdn_src, $tag);
 		return $tag;
 	}
 	function add_defer_to_script( $tag, $handle, $src ) {
@@ -285,7 +287,7 @@
 	if($to_defer){
 		add_filter( 'script_loader_tag', 'add_defer_to_script', 20, 3 );
 	}
-	if ($to_minify){
+	if (true){
 		add_filter( 'script_loader_tag', 'replace_with_minify',20,3);
 	}
 	if ($to_aggregate){
@@ -295,7 +297,7 @@
 		add_filter('style_loader_tag','remove_css_tags',20,3);
 		add_action('wp_footer','add_aggregate_css');
 	}
-	if ($to_minify_css){
+	if (true){
 		add_filter( 'style_loader_tag', 'replace_with_minified', 20, 3 );
 	}
 	if ($to_defer_css){

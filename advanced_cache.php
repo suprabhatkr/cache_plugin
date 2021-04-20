@@ -1,4 +1,5 @@
 <?php 
+	define('CDNNAME' , 'http://127.0.0.1:5000');
 	$url = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 	$short_url = str_replace("http://", "", $url);
 	$cache_location = WP_CONTENT_DIR."/cache/suprabhat/".$short_url."index.html";
