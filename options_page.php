@@ -11,13 +11,13 @@
 	    ?>
 	    <h2>Cache Plugin Settings</h2>
 	    <!-- <form action="options.php" method="post"> -->
-	    <form action="http://127.0.0.1/wordpress_blog/wp-content/plugins/caching_plugin/save_option.php" method="post">
+	    <form action="https://wordpress-608342-1970613.cloudwaysapps.com/wp-content/plugins/caching_plugin/save_option.php" method="post">
 	        <?php 
 	        settings_fields( 'cache_plugin_options' );
 	        do_settings_sections( 'cache_plugin' ); 
 	        submit_button();?>
 	    </form>
-	    <form action="http://127.0.0.1/wordpress_blog/wp-content/plugins/caching_plugin/image_func.php" method="post">
+	    <form action="https://wordpress-608342-1970613.cloudwaysapps.com/wp-content/plugins/caching_plugin/image_func.php" method="post">
 	        <?php 
 	        submit_button();?>
 	    </form>
